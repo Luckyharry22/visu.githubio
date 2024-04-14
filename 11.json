@@ -1,0 +1,72 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data": {
+      "url": "HW_III.xlsx",
+      "format": {
+        "type": "excel",
+        "sheet": "SalesOrders"
+      }
+    },
+    "vconcat": [
+      {
+        "mark": {"type": "arc", "innerRadius": 44},
+        "encoding": {
+          "theta": {"field": "Total", "type": "quantitative"},
+          "color": {"field": "Rep", "type": "nominal"},
+          "tooltip": [
+            {"field": "Rep", "type": "nominal"},
+            {"field": "Total", "type": "quantitative"}
+          ]
+        },
+        "title": "Donut Chart"
+      },
+      {
+        "selection": {"brush": {"encodings": ["x", "y"], "type": "interval"}},
+        "mark": {"type": "point"},
+        "encoding": {
+          "x": {"field": "Units", "type": "quantitative"},
+          "y": {"field": "Unit Cost", "type": "quantitative"},
+          "color": {
+            "condition": {"selection": "brush", "field": "Item", "type": "nominal"},
+            "value": "grey"
+          },
+          "tooltip": [
+            {"field": "Units", "type": "quantitative"},
+            {"field": "Unit Cost", "type": "quantitative"},
+            {"field": "Item", "type": "nominal"}
+          ]
+        },
+        "title": "Correlation between Units and Unit Cost with Rectangle Brush"
+      },
+      {
+        "mark": {"type": "area"},
+        "encoding": {
+          "x": {"field": "OrderDate", "type": "temporal"},
+          "y": {"field": "Total", "type": "quantitative"},
+          "color": {"field": "Item", "type": "nominal"}
+        },
+        "title": "Streamgraph of Total over Time"
+      },
+      {
+        "layer": [
+          {
+            "mark": {"type": "bar"},
+            "encoding": {
+              "x": {"field": "Units", "type": "quantitative", "bin": true},
+              "y": {"aggregate": "count", "type": "quantitative"},
+              "color": {"value": "steelblue"}
+            },
+            "title": "Histogram of Units with Global Mean Overlay"
+          },
+          {
+            "mark": {"type": "rule", "color": "red"},
+            "encoding": {
+              "x": {"aggregate": "mean", "field": "Units", "type": "quantitative"},
+              "size": {"value": 2}
+            }
+          }
+        ]
+      }
+    ],
+    "resolve": {"scale": {"color": "independent"}}
+}  
